@@ -59,7 +59,9 @@ def main():
 	if psql.returncode != 0:
 		raise subprocess.CalledProcessError(psql.returncode, psql.args)
 
-	csv.writer(sys.stdout, lineterminator='\n').writerows((binascii.hexlify(binary).decode('ascii'), expected) for binary, expected in zip(results, tests))
+	writer = csv.writer(sys.stdout, lineterminator='\n')
+	writer.writerow(('binary', 'expected'))
+	writer.writerows((binascii.hexlify(binary).decode('ascii'), expected) for binary, expected in zip(results, tests))
 
 
 if __name__ == '__main__':
