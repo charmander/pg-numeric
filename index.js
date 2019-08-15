@@ -11,7 +11,7 @@ const readDigit = (buffer, index) => {
 };
 
 const readNumeric = buffer => {
-	const ndigits = buffer.readInt16BE(0);
+	const ndigits = buffer.readUInt16BE(0);
 	let weight = buffer.readInt16BE(2);
 	const sign = buffer.readUInt16BE(4);
 	const dscale = buffer.readUInt16BE(6);
@@ -31,10 +31,6 @@ const readNumeric = buffer => {
 
 	default:
 		throw new RangeError('Invalid numeric sign: 0x' + sign.toString(16));
-	}
-
-	if (ndigits < 0) {
-		throw new RangeError('Invalid numeric length: ' + ndigits + ' digits');
 	}
 
 	if (2 * ndigits !== buffer.length - 8) {
