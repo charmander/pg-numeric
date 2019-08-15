@@ -25,6 +25,8 @@ def main():
 
 			tests.append(line.rstrip())
 
+	tests.append('ffff7fff00000000' + '2345' * 0xffff)
+
 	query = 'CREATE TEMPORARY TABLE t (x numeric); COPY t FROM STDIN (FORMAT binary); COPY t TO STDOUT'
 
 	with subprocess.Popen(['psql', '--set=ON_ERROR_STOP=1', '-c', query], stdin=subprocess.PIPE, stdout=subprocess.PIPE) as psql:
