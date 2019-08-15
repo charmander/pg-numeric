@@ -16,14 +16,17 @@ const readNumeric = buffer => {
 	const sign = buffer.readUInt16BE(4);
 	const dscale = buffer.readUInt16BE(6);
 	let signText;
+	let isNegativeZero;
 
 	switch (sign) {
 	case 0x0000:
 		signText = '';
+		isNegativeZero = false;
 		break;
 
 	case 0x4000:
 		signText = '-';
+		isNegativeZero = true;
 		break;
 
 	case 0xc000:
@@ -60,6 +63,7 @@ const readNumeric = buffer => {
 			weight--;
 
 			if (digit !== 0) {
+				isNegativeZero = false;
 				result += String(digit);
 				break;
 			}
@@ -98,16 +102,24 @@ const readNumeric = buffer => {
 			i++;
 			weight--;
 
+			if (isNegativeZero && digit !== 0) {
+				isNegativeZero = false;
+			}
+
 			result += String(10000 + digit).substring(1);
 		}
 
 		{
 			const digit = i < ndigits ? readDigit(buffer, i) : 0;
 			result += String(10000 + digit).substr(1, dscale % 4);
+
+			if (isNegativeZero && digit >= 10 ** (dscale % 4)) {
+				isNegativeZero = false;
+			}
 		}
 	}
 
-	return result;
+	return isNegativeZero ? result.substring(1) : result;
 };
 
 module.exports = readNumeric;
