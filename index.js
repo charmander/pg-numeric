@@ -37,7 +37,7 @@ const readNumeric = buffer => {
 		throw new RangeError('Invalid numeric length: ' + ndigits + ' digits');
 	}
 
-	if (2 * ndigits > buffer.length - 8) {
+	if (2 * ndigits !== buffer.length - 8) {
 		throw new RangeError('Invalid numeric length: ' + buffer.length + ' bytes of data representing ' + ndigits + ' digits');
 	}
 
