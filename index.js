@@ -14,7 +14,7 @@ const readNumeric = buffer => {
 	const ndigits = buffer.readInt16BE(0);
 	let weight = buffer.readInt16BE(2);
 	const sign = buffer.readUInt16BE(4);
-	const dscale = buffer.readInt16BE(6);
+	const dscale = buffer.readUInt16BE(6);
 	let signText;
 
 	switch (sign) {
@@ -41,8 +41,8 @@ const readNumeric = buffer => {
 		throw new RangeError('Invalid numeric length: ' + buffer.length + ' bytes of data representing ' + ndigits + ' digits');
 	}
 
-	if (dscale < 0) {
-		throw new RangeError('Invalid numeric dscale: 0x' + (dscale & 0xffff).toString(16));
+	if (dscale > 0x3fff) {
+		throw new RangeError('Invalid numeric dscale: 0x' + dscale.toString(16));
 	}
 
 	let result = signText;
