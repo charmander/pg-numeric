@@ -1,5 +1,3 @@
-[![Build status][ci image]][ci]
-
 A reader for the PostgreSQL binary format for numeric values, producing a string. Designed for [pg][].
 
 ```js
@@ -11,6 +9,3 @@ readNumeric(Buffer.from('000600020000000a000c0d801ed203db198f0834', 'hex'))
 
 
   [pg]: https://github.com/brianc/node-postgres
-
-  [ci]: https://travis-ci.org/charmander/pg-numeric
-  [ci image]: https://api.travis-ci.org/charmander/pg-numeric.svg
