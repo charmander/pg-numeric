@@ -1,10 +1,20 @@
 'use strict';
 
-const assert = require('assert').strict;
+const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const {inspect} = require('util');
-const test = require('@charmander/test')(module);
+const util = require('util');
+
+const test = {
+	group(groupName, build) {
+		function test(testName, run) {
+			console.log(groupName + ' > ' + testName);
+			run();
+		}
+
+		build(test);
+	},
+};
 
 const readNumeric = require('../');
 
@@ -15,10 +25,12 @@ test.group('decimal round trips', test => {
 	const testRows = fs.readFileSync(path.join(__dirname, 'decimal.csv'), 'utf8').match(/.+/g).slice(1);
 
 	for (const row of testRows) {
-		const [testHex, expected] = row.split(',');
+		const cols = row.split(',');
+		const testHex = cols[0];
+		const expected = cols[1];
 
-		test(inspect(expected), () => {
-			assert.equal(readNumeric(Buffer.from(testHex, 'hex')), expected);
+		test(util.inspect(expected), () => {
+			assert.strictEqual(readNumeric(Buffer.from(testHex, 'hex')), expected);
 		});
 	}
 });
@@ -27,10 +39,12 @@ test.group('consistent interpretations', test => {
 	const testRows = fs.readFileSync(path.join(__dirname, 'binary.csv'), 'utf8').match(/.+/g).slice(1);
 
 	for (const row of testRows) {
-		const [testHex, expected] = row.split(',');
+		const cols = row.split(',');
+		const testHex = cols[0];
+		const expected = cols[1];
 
 		test(`${truncate(testHex)} ('${truncate(expected)}')`, () => {
-			assert.equal(readNumeric(Buffer.from(testHex, 'hex')), expected);
+			assert.strictEqual(readNumeric(Buffer.from(testHex, 'hex')), expected);
 		});
 	}
 });
