@@ -55,4 +55,22 @@ test.group('errors', test => {
 			readNumeric(Buffer.from('00010000000000000001ff', 'hex'));
 		}, /RangeError: Invalid numeric length/);
 	});
+
+	test('digit out of range', () => {
+		assert.throws(() => {
+			readNumeric(Buffer.from('0001000000000000ffff', 'hex'));
+		}, /RangeError: Invalid numeric digit: 65535/);
+	});
+
+	test('invalid sign', () => {
+		assert.throws(() => {
+			readNumeric(Buffer.from('00010000f00000000001', 'hex'));
+		}, /RangeError: Invalid numeric sign: 0xf000/);
+	});
+
+	test('scale out of range', () => {
+		assert.throws(() => {
+			readNumeric(Buffer.from('00010000000040000001', 'hex'));
+		}, /RangeError: Invalid numeric dscale: 0x4000/);
+	});
 });
