@@ -113,7 +113,7 @@ const readNumeric = buffer => {
 			const digit = i < ndigits ? readDigit(buffer, i) : 0;
 			result += String(10000 + digit).substr(1, dscale % 4);
 
-			if (isNegativeZero && digit >= Math.pow(10, dscale % 4)) {
+			if (isNegativeZero && digit >= Math.pow(10, 4 - dscale % 4)) {
 				isNegativeZero = false;
 			}
 		}
